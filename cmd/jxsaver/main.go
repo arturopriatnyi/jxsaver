@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	app := &cli.App{
+	cli := &cli.App{
 		Name:  "JXSaver",
 		Usage: "CLI tool for validating and saving JSON and XML as files",
 		Flags: []cli.Flag{
@@ -32,13 +32,11 @@ func main() {
 			data := c.String(format)
 			log.Printf("Format: %s, Data: %s", format, data)
 
-			// Logic goes here
-
 			return nil
 		},
 	}
 
-	err := app.Run(os.Args)
+	err := cli.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
 	}
