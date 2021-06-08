@@ -1,0 +1,5 @@
+# build related
+/build
+
+# IDE related
+.idea
