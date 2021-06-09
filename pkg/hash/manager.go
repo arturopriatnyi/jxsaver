@@ -1,8 +1,9 @@
-package hasher
+// Package hash provides utilities to work with hashing.
+package hash
 
 import "crypto/md5"
 
-//go:generate mockgen -source=hasher.go -destination=mock/mock.go
+//go:generate mockgen -source=manager.go -destination=mock/mock.go
 
 // Manager is interface for performing hashing operations.
 type Manager interface {
