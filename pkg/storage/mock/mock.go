@@ -47,6 +47,35 @@ func (mr *MockManagerMockRecorder) CreateFile(name interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFile", reflect.TypeOf((*MockManager)(nil).CreateFile), name)
 }
 
+// FileExists mocks base method.
+func (m *MockManager) FileExists(fileName string) bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FileExists", fileName)
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// FileExists indicates an expected call of FileExists.
+func (mr *MockManagerMockRecorder) FileExists(fileName interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FileExists", reflect.TypeOf((*MockManager)(nil).FileExists), fileName)
+}
+
+// ReadLinesFromFile mocks base method.
+func (m *MockManager) ReadLinesFromFile(fileName string) ([]string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ReadLinesFromFile", fileName)
+	ret0, _ := ret[0].([]string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadLinesFromFile indicates an expected call of ReadLinesFromFile.
+func (mr *MockManagerMockRecorder) ReadLinesFromFile(fileName interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadLinesFromFile", reflect.TypeOf((*MockManager)(nil).ReadLinesFromFile), fileName)
+}
+
 // WriteToFile mocks base method.
 func (m *MockManager) WriteToFile(fileName, content string) error {
 	m.ctrl.T.Helper()
