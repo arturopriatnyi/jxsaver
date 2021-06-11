@@ -7,9 +7,20 @@ import (
 	"os"
 
 	"github.com/urfave/cli/v2"
+
+	"github.com/imarrche/jxsaver/internal/jxsaver"
+	"github.com/imarrche/jxsaver/pkg/hash"
+	"github.com/imarrche/jxsaver/pkg/storage"
 )
 
 func main() {
+	sm := storage.NewManager()
+	hm := hash.NewManager()
+	app := jxsaver.NewApp(sm, hm)
+	if err := app.Init(); err != nil {
+		log.Fatal(err)
+	}
+
 	cli := &cli.App{
 		Name:  "JXSaver",
 		Usage: "CLI tool for validating and saving JSON and XML as files",
@@ -31,6 +42,8 @@ func main() {
 			format := c.FlagNames()[0]
 			data := c.String(format)
 			log.Printf("Format: %s, Data: %s", format, data)
+
+			log.Println(app.Save(format, data))
 
 			return nil
 		},
