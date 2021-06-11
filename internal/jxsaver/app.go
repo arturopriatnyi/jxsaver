@@ -92,13 +92,12 @@ func (app *App) Save(format, data string) error {
 		return ErrDuplicateData
 	}
 
-	err := app.Validate(format, data)
-	if err != nil {
+	if err := app.Validate(format, data); err != nil {
 		return err
 	}
 
 	fileName := fmt.Sprintf("%d.%s", len(app.Hashes), format)
-	if err = app.store.WriteToFile(fileName, data); err != nil {
+	if err := app.store.WriteToFile(fileName, data); err != nil {
 		return err
 	}
 	app.Hashes[hashStr] = true
