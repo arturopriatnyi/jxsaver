@@ -25,6 +25,8 @@ var (
 	ErrInvalidFormat = errors.New("invalid format provided")
 	// ErrDuplicateData is returned when user provides data that is already saved.
 	ErrDuplicateData = errors.New("duplicate data provided")
+	// ErrInvalidData is return when user provides invalid data.
+	ErrInvalidData = errors.New("invalid data provided")
 )
 
 type App struct {
@@ -50,11 +52,11 @@ func (app *App) Init() error {
 		return app.store.CreateFile(hashesFileName)
 	}
 
+	// Hydrating hash store from file.
 	hashes, err := app.store.ReadLinesFromFile(hashesFileName)
 	if err != nil {
 		return err
 	}
-
 	for _, h := range hashes {
 		app.Hashes[h] = true
 	}
@@ -63,21 +65,27 @@ func (app *App) Init() error {
 }
 
 // Validate validates data using provided format.
-func (app *App) Validate(format, data string) error {
+func (app *App) Validate(format, data string) (err error) {
 	r := strings.NewReader(data)
 
 	var parsedData interface{}
 	if format == jsonFormat {
-		return json.NewDecoder(r).Decode(&parsedData)
+		err = json.NewDecoder(r).Decode(&parsedData)
 	} else if format == xmlFormat {
-		return xml.NewDecoder(r).Decode(&parsedData)
+		err = xml.NewDecoder(r).Decode(&parsedData)
+	} else {
+		return ErrInvalidFormat
 	}
 
-	return ErrInvalidFormat
+	if err != nil {
+		return ErrInvalidData
+	}
+	return nil
 }
 
 // Save saves unique data to the file system.
 func (app *App) Save(format, data string) error {
+	// Calculating hash before validation to not validate duplicate data.
 	hash := app.hasher.Hash([]byte(data))
 	hashStr := string(hash[:])
 	if app.Hashes[hashStr] {
@@ -88,10 +96,13 @@ func (app *App) Save(format, data string) error {
 	if err != nil {
 		return err
 	}
-	if err = app.store.WriteToFile(fmt.Sprintf("%d.%s", len(app.Hashes), format), data); err != nil {
+
+	fileName := fmt.Sprintf("%d.%s", len(app.Hashes), format)
+	if err = app.store.WriteToFile(fileName, data); err != nil {
 		return err
 	}
 	app.Hashes[hashStr] = true
 
+	// Saving hash to file, each hash on a new line.
 	return app.store.WriteToFile(hashesFileName, fmt.Sprintf("%s\n", hashStr))
 }

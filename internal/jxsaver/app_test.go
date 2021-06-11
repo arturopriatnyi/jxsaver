@@ -13,10 +13,11 @@ import (
 
 func TestJXSaver_Init(t *testing.T) {
 	tcs := []struct {
-		Name      string
-		Mock      func(c *gomock.Controller, sm *mockstorage.MockManager, hm *mockhasher.MockManager)
-		ExpError  bool
-		ExpHashes []string
+		Name         string
+		Mock         func(c *gomock.Controller, sm *mockstorage.MockManager, hm *mockhasher.MockManager)
+		ExpError     bool
+		ExpHashes    []string
+		ExpHashesLen int
 	}{
 		{
 			Name: "init without errors, hashes file exists",

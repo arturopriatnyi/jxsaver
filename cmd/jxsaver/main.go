@@ -43,7 +43,12 @@ func main() {
 			data := c.String(format)
 			log.Printf("Format: %s, Data: %s", format, data)
 
-			log.Println(app.Save(format, data))
+			err := app.Save(format, data)
+			if err != nil {
+				log.Println(err)
+			} else {
+				log.Println("Saved!")
+			}
 
 			return nil
 		},
